@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "PartnerFinder": {
+            "applicationId": "cAVx1PXgKtGDQdwTMKUBWcWgWmWCeJ7PKjjTNpDs", 
+            "masterKey": "H748uH4nShis6CQwqHAvGAEsGvCsD2pUtAqGa2C9"
+        }, 
+        "_default": {
+            "link": "PartnerFinder"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.3.0"
+    }
+}
