@@ -193,6 +193,83 @@ function initialize() {
       userinmap.set("password", "123");
       userinmap.set("geolocation", point);
 
+      query.notEqualTo("geoLo", 0);
+      query.find({
+        success: function(results) { 
+          alert("Successfully retrieved " + results.length + " Locations.");
+          // Do something with the returned Parse.Object values
+          var marker = [];
+          var infowindow = [];
+          var otherMarkerContent = [];
+          var usernameVar = [];
+          var courseVar = [];
+          var phonenumberVar = [];
+          for (var i = 0; i < results.length; i++) { 
+            var object = results[i];
+            usernameVar[i] = object.get('username');
+            courseVar[i] = object.get('course');
+            phonenumberVar[i] = object.get('phonenumber');
+
+            marker[i] = new google.maps.Marker({
+            position : new google.maps.LatLng(object.get('geoLa'), object.get('geoLo')),
+            //animation:google.maps.Animation.BOUNCE
+            //icon:'111111.png'
+            });
+
+            otherMarkerContent[i] = '<div id="content">'+
+            '<div id="siteNotice">usernameVar[i] </div>'+
+            '<h1 id="firstHeading" class="firstHeading">usernameVar[i]</h1>'+
+            '<div id="bodyContent">'+
+            '<p><b>courseVar[i]</b></p> <p>phonenumberVar[i]</p> <p><b></b></p>'+
+            '<p> You have <a href="#">6</a> friends going                     </p>'+
+            '</div>'+
+            '</div>';
+
+            infowindow[i] = new google.maps.InfoWindow({
+              //map: map,
+              //position: myCenter,
+              content: otherMarkerContent[i]
+            });  
+
+            marker[i].setMap(map);
+            var innerKey = i;
+            google.maps.event.addListener(marker[i], 'click', function(innerKey) {
+              return function() {
+                infowindow[innerKey].open(map, marker[innerKey]);
+              }
+            }(i));
+          }
+
+          /*
+
+            var object2 = results[6];
+            var marker2 = new google.maps.Marker({
+            position : new google.maps.LatLng(object2.get('geoLa'), object2.get('geoLo')),
+            //animation:google.maps.Animation.BOUNCE
+            //icon:'111111.png'
+            });
+
+            var infowindow2 = new google.maps.InfoWindow({
+              //map: map,
+              //position: myCenter,
+              content: otherMarkerContent
+            });  
+
+            marker2.setMap(map);
+
+            google.maps.event.addListener(marker2, 'click', function() {
+              infowindow2.open(map,marker2);
+            });
+
+          */
+
+
+        },
+        error: function(error) {
+          alert("Error: " + error.code + " " + error.message);
+        }
+      });      
+
       var contentString = '<div id="content">'+
       '<div id="siteNotice">'+
       '</div>'+
@@ -202,6 +279,8 @@ function initialize() {
       '<p> You have <a href="#">6</a> friends going                     </p>'+
       '</div>'+
       '</div>';
+
+
 
       var infowindow = new google.maps.InfoWindow({
         //map: map,
@@ -218,26 +297,7 @@ function initialize() {
       });
       marker.setMap(map);
 
-      query.notEqualTo("geoLo", 0);
-      query.find({
-        success: function(results) { 
-          alert("Successfully retrieved " + results.length + " Locations.");
-          // Do something with the returned Parse.Object values
-          //var marker[results.length];
-          for (var i = 0; i < results.length; i++) { 
-            var object = results[i];
-            var marker = new google.maps.Marker({
-            position : new google.maps.LatLng(object.get('geoLa'), object.get('geoLo')),
-            //animation:google.maps.Animation.BOUNCE
-            //icon:'111111.png'
-            });
-            marker.setMap(map);
-          }
-        },
-        error: function(error) {
-          alert("Error: " + error.code + " " + error.message);
-        }
-      });
+
       /*
       query.notEqualTo("geoLo", 0);
       query.find({
@@ -462,20 +522,5 @@ function myFunction() {
 
     <a href="#googleMap" data-rel="close" class="ui-btn ui-btn-inline ui-shadow ui-corner-all ui-btn-a ui-icon-delete ui-btn-icon-left">Close panel</a>
   </div> 
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </body>
 </html>
