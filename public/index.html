@@ -15,7 +15,7 @@
 <script type="text/javascript">
 Parse.initialize("cAVx1PXgKtGDQdwTMKUBWcWgWmWCeJ7PKjjTNpDs", "yN4q386eX75gv2dA1YFXWbYFxQzJlYUeNthSNpfY");
 
-var user = Parse.Object.extend("user");
+var user = Parse.Object.extend("User");
 
 
 
@@ -24,14 +24,14 @@ var user = Parse.Object.extend("user");
 </head>
 
 <body>
-	<center>
-	<center><img src= "logo.png" alt= "Logo" style = "width:100px; height:100px"></center>
-	
-	<form style="margin-left:30px; margin-right:30px;">
-		User Name: <input type="text" id="username"><br>
-		Phone Number: <input type="text" id="phonenumber"><br>
+  <center>
+  <center><img src= "logo.png" alt= "Logo" style = "width:100px; height:100px"></center>
+  
+  <form style="margin-left:30px; margin-right:30px;">
+    User Name: <input type="text" id="username"><br>
+    Phone Number: <input type="text" id="phonenumber"><br>
 
-		<select style="width:200px;margin-left:40px;margin-bottom:50px; height: 50px;" size=1 id = "course">
+    <select style="width:200px;margin-left:40px;margin-bottom:50px; height: 50px;" size=1 id = "course">
               
               <option value="eecs214">EECS 214</option>
               <option value="eecs336">EECS 336</option>
@@ -41,41 +41,66 @@ var user = Parse.Object.extend("user");
               <option value="eecs453">EECS 453</option>
               
          </select>
-		 
-		 <button id="submitButton" style = "margin-top:30px" onclick="myFunction()">Search Now !</button>
-	</form>
+     
+     <button id="submitButton" style = "margin-top:30px" onclick="myFunction()">Search Now !</button>
+  </form>
 
-	</center>
+
+  </center>
 
 <script>
 function myFunction() {
    // document.getElementById("submitButton")
-   	var user = new Parse.User();
-   	var username=$("#username").val();
-   	var course=$("#course").val();
-   	var phonenumber=$("#phonenumber").val();
+    
     //var geolocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
-	user.set("username", username);
-	user.set("course", course);
-	user.set("phonenumber", phonenumber);
-	user.set("password", "123");
-  var point = new Parse.GeoPoint({latitude: 40.0, longitude: -30.0});
-  user.set("geolocation", point);
- 	//user.set("geolocation", geolocation);
+  var lat;
+  var lon;
 
-	user.signUp(null, {
-  		success: function(user) {
-    // Hooray! Let them use the app now.
-    	window.location.href="./MapTesting.html";
-  		},
-  		error: function(user, error) {
-    // Show the error message somewhere and let the user try again.
-    	alert("Error: " + error.code + " " + error.message);
-  		}
-	});
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+        x.innerHTML = "Geolocation is not supported by this browser.";
     }
 
+  function showPosition(position) {
+
+      lat = position.coords.latitude;
+      lon = position.coords.longitude;
+      
+      //var point = new Parse.GeoPoint({latitude: lat, longitude: lon});
+      //alert("what the hell!!!");
+      var user = new Parse.User();
+      var geoLoc = new Parse.GeoPoint(lat, lon);
+      user.set("geolocation", geoLoc);
+      //alert("latitude: " + lat + "longitude: " + lon);
     
+    var username=$("#username").val();
+    var course=$("#course").val();
+    var phonenumber=$("#phonenumber").val();
+
+
+  user.set("username", username);
+  user.set("course", course);
+  user.set("phonenumber", phonenumber);
+  user.set("password", "123");
+  user.set("geoLa", lat);
+  user.set("geoLo", lon);
+
+  user.signUp(null, {
+      success: function(user) {
+    // Hooray! Let them use the app now.
+      window.location.href="./MapTesting.html";
+      },
+      error: function(user, error) {
+    // Show the error message somewhere and let the user try again.
+      alert("Error: " + error.code + " " + error.message);
+      }
+  });
+
+  }
+
+}
+
 </script>
 
 
